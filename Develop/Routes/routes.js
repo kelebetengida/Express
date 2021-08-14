@@ -2,30 +2,41 @@ const fs = require("fs");
 const path=require("path");
 
 
+const updateDb=(notes)=>{
+    fs.writeFileSync(path.join(__dirname, "../db/db.json"), JSON.stringify(notes))
+}
 
+const readNotes=()=>{
+    const notes= fs.readFileSync(path.join(__dirname, "../db/db.json"))
+    return JSON.parse(notes)
+}
 module.exports=app=> {
-    fs.readFile("db/db.json","utf8",(err,data)=>{
+  //  fs.readFile("db/db.json","utf8",(err,data)=>{
         
-        const notes =JSON.parse(data);
+     //   const notes =JSON.parse(data);
 
         app.get("/api/notes", (req,res)=>{
+            const notes=readNotes();
             res.json(notes);
         });
 
         app.post("/api/notes", (req,res)=>{
+            const notes=readNotes();
             let note=req.body;
             notes.push(note);
-            updateDb();
-            return console.log("New note: "+note.title);
+            updateDb(notes);
+            res.sendStatus(200)
         });
 
         app.get("/api/notes/:id", (req,res)=>{
+            const notes=readNotes();
             res.json(notes[req.params.id]);
         });
 
         app.delete("/api/notes/:id", (req,res)=>{
-            notes.splice(req.params.id,1);
-            updateDb();
+            const notes=notes.splice(req.params.id,1);
+            console.log(notes);
+            updateDb(notes.id);
         });
         
         app.get("/notes", (req,res)=>{
@@ -37,10 +48,6 @@ module.exports=app=> {
         });
 
 
-        updateDb=()=>{
-            fs.writeFile("db/db.json", JSON.stringify(notes,"\t"), err=>{
-                return true;
-            })
-        }
-    })
+        
+  //  })
 }
