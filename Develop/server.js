@@ -14,4 +14,4 @@ app.use(express.static("public"));
 require("./Routes/routes")(app);
 
 
-app.listen(PORT, ()=> {console.log(`server listening on port:"+ ${PORT}`)})
+app.listen(PORT, ()=> {console.log(`server listening on port: ${PORT}`)})
